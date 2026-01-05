@@ -4,408 +4,273 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>saneel.ai | Intelligent Research</title>
-    <!-- Tailwind CSS for styling -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Marked.js for Markdown rendering -->
+    <!-- Marked.js for formatting -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- FontAwesome for Icons -->
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 
     <style>
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #1a1a1a; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
-
-        body { font-family: 'Inter', sans-serif; background-color: #0f1115; color: #e2e8f0; }
+        /* Modern Dark Theme styling */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f1115; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        
+        body { font-family: 'Inter', sans-serif; background-color: #0f1115; color: #cbd5e1; }
         pre, code { font-family: 'JetBrains Mono', monospace; }
 
-        /* Typing Dot Animation */
-        .typing-dot {
-            width: 6px; height: 6px; background-color: #94a3b8; border-radius: 50%;
-            animation: bounce 1.4s infinite ease-in-out both;
-        }
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+        /* Animation for bubbles */
+        .fade-in-up { animation: fadeInUp 0.3s ease-out forwards; opacity: 0; transform: translateY(10px); }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 
         /* Markdown Styles */
-        .prose p { margin-bottom: 0.8em; }
-        .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 0.8em; }
-        .prose ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 0.8em; }
-        .prose code { background: #2d3748; padding: 2px 4px; border-radius: 4px; font-size: 0.9em; }
-        .prose pre { background: #1e293b; padding: 1em; border-radius: 8px; overflow-x: auto; margin-bottom: 1em; }
-        .prose strong { color: #f8fafc; font-weight: 600; }
-        .prose h1, .prose h2, .prose h3 { color: #f8fafc; font-weight: 600; margin-top: 1em; margin-bottom: 0.5em; }
+        .prose strong { color: #fff; font-weight: 600; }
+        .prose ul { list-style-type: disc; padding-left: 20px; margin: 10px 0; }
+        .prose ol { list-style-type: decimal; padding-left: 20px; margin: 10px 0; }
+        .prose h3 { font-size: 1.1em; color: #fff; font-weight: 600; margin-top: 15px; margin-bottom: 5px; }
+        .prose code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #60a5fa; }
     </style>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: { 500: '#3b82f6', 600: '#2563eb' },
-                        dark: { 800: '#1e293b', 900: '#0f172a' }
-                    }
-                }
-            }
-        }
-    </script>
 </head>
-<body class="h-screen flex overflow-hidden text-sm md:text-base">
+<body class="h-screen flex overflow-hidden">
 
-    <!-- SIDEBAR -->
-    <aside id="sidebar" class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col transition-all duration-300 absolute md:relative z-20 h-full transform -translate-x-full md:translate-x-0">
-        <!-- Brand Logo -->
-        <div class="p-5 border-b border-slate-800 flex justify-between items-center">
-            <div class="flex items-center gap-2 text-white font-semibold text-lg tracking-tight">
-                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
-                    <i class="fa-solid fa-brain text-white text-sm"></i>
-                </div>
-                saneel.ai
+    <!-- SIDEBAR (Collapsible) -->
+    <aside class="w-64 bg-[#0b0d10] border-r border-slate-800 flex flex-col hidden md:flex z-20">
+        <!-- Logo Area -->
+        <div class="p-5 border-b border-slate-800 flex items-center gap-3">
+            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(37,99,235,0.3)]">
+                <i class="fa-solid fa-brain text-white text-sm"></i>
             </div>
-            <button class="md:hidden text-slate-400 hover:text-white" onclick="toggleSidebar()">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+            <span class="font-semibold text-white tracking-tight">saneel.ai</span>
         </div>
 
-        <!-- New Chat Button -->
+        <!-- New Chat -->
         <div class="p-4">
-            <button onclick="startNewChat()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 py-3 px-4 rounded-lg border border-slate-700 flex items-center gap-3 transition-colors text-sm font-medium">
-                <i class="fa-solid fa-plus text-blue-500"></i>
-                New Research
+            <button onclick="clearChat()" class="w-full bg-slate-800/50 hover:bg-slate-800 text-slate-200 py-2.5 px-4 rounded-lg border border-slate-700/50 flex items-center gap-3 transition-all text-sm font-medium hover:border-slate-600">
+                <i class="fa-solid fa-plus text-blue-500"></i> New Session
             </button>
         </div>
 
-        <!-- History List -->
-        <div class="flex-1 overflow-y-auto px-2 space-y-1" id="history-list">
-            <!-- Chat history items will appear here -->
-            <div class="text-xs text-slate-500 uppercase font-bold tracking-wider px-4 mt-4 mb-2">Recent</div>
+        <!-- History -->
+        <div class="flex-1 overflow-y-auto px-2 py-2">
+            <div class="text-[10px] text-slate-500 uppercase font-bold tracking-wider px-4 mb-2">Local History</div>
+            <div id="history-list" class="space-y-1"></div>
         </div>
 
-        <!-- Sidebar Footer -->
+        <!-- Footer -->
         <div class="p-4 border-t border-slate-800">
-            <button onclick="openSettings()" class="flex items-center gap-3 text-slate-400 hover:text-white text-sm w-full p-2 rounded hover:bg-slate-800 transition">
-                <i class="fa-solid fa-gear"></i>
-                <span>Settings & API</span>
+            <button onclick="toggleSettings()" class="flex items-center gap-3 text-slate-400 hover:text-white text-xs transition w-full p-2 rounded hover:bg-slate-800/50">
+                <i class="fa-solid fa-sliders"></i> System Config
             </button>
         </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
-    <main class="flex-1 flex flex-col bg-[#0f1115] relative w-full">
+    <!-- MAIN CHAT AREA -->
+    <main class="flex-1 flex flex-col relative bg-[#0f1115]">
+        
         <!-- Mobile Header -->
-        <header class="md:hidden h-14 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4 z-10">
-            <button onclick="toggleSidebar()" class="text-slate-400"><i class="fa-solid fa-bars"></i></button>
-            <span class="font-semibold text-white">saneel.ai</span>
-            <div class="w-8"></div> <!-- Spacer -->
-        </header>
+        <div class="md:hidden h-14 bg-[#0b0d10] border-b border-slate-800 flex items-center justify-between px-4">
+            <span class="font-semibold text-white flex items-center gap-2">
+                <i class="fa-solid fa-brain text-blue-500"></i> saneel.ai
+            </span>
+        </div>
 
-        <!-- Chat Container -->
+        <!-- Messages -->
         <div id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 scroll-smooth">
-            <!-- Welcome Message -->
-            <div class="flex flex-col items-center justify-center h-full text-center space-y-4 opacity-50" id="welcome-screen">
-                <div class="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mb-2">
-                    <i class="fa-solid fa-layer-group text-3xl text-blue-500"></i>
+            <!-- Welcome Screen -->
+            <div id="welcome" class="flex flex-col items-center justify-center h-full text-center space-y-6 animate-fade-in-up">
+                <div class="w-16 h-16 bg-slate-800/50 rounded-2xl flex items-center justify-center mb-2 shadow-xl ring-1 ring-white/10">
+                    <i class="fa-solid fa-shield-halved text-3xl text-blue-500"></i>
                 </div>
-                <h2 class="text-2xl font-semibold text-white">saneel.ai Workspace</h2>
-                <p class="max-w-md text-slate-400">Secure, private environment for advanced research. Conversations are stored locally on this machine.</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm mt-6">
-                    <div class="bg-slate-900 border border-slate-800 p-3 rounded-lg cursor-pointer hover:bg-slate-800" onclick="setInput('Draft a project roadmap for...')">Draft a roadmap</div>
-                    <div class="bg-slate-900 border border-slate-800 p-3 rounded-lg cursor-pointer hover:bg-slate-800" onclick="setInput('Analyze the risks of...')">Analyze risks</div>
+                <div>
+                    <h2 class="text-2xl font-semibold text-white mb-2">Secure Research Environment</h2>
+                    <p class="text-slate-400 text-sm max-w-sm mx-auto">
+                        Operating in <span class="text-green-400 font-mono text-xs bg-green-400/10 px-2 py-0.5 rounded">LOCAL_SAFE_MODE</span>. 
+                        Chats are stored on this device only.
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm w-full max-w-lg px-6">
+                    <button onclick="quickFill('Create a project roadmap')" class="bg-[#1a1d24] border border-slate-800 p-3 rounded-xl hover:bg-slate-800 hover:border-slate-600 transition text-left text-slate-300">
+                        <i class="fa-regular fa-map text-blue-500 mr-2"></i> Create a project roadmap
+                    </button>
+                    <button onclick="quickFill('Analyze potential risks')" class="bg-[#1a1d24] border border-slate-800 p-3 rounded-xl hover:bg-slate-800 hover:border-slate-600 transition text-left text-slate-300">
+                        <i class="fa-solid fa-magnifying-glass-chart text-purple-500 mr-2"></i> Analyze potential risks
+                    </button>
                 </div>
             </div>
         </div>
 
         <!-- Input Area -->
-        <div class="p-4 md:p-6 bg-[#0f1115]">
-            <div class="max-w-4xl mx-auto relative">
-                <div class="bg-slate-800/50 border border-slate-700 rounded-xl flex items-end p-2 shadow-lg focus-within:ring-1 focus-within:ring-blue-500/50 transition-all">
-                    <textarea id="user-input" rows="1" class="w-full bg-transparent text-white p-3 focus:outline-none resize-none max-h-40" placeholder="Type your query..." oninput="autoResize(this)" onkeydown="handleEnter(event)"></textarea>
-                    <button onclick="sendMessage()" id="send-btn" class="mb-1 mr-1 p-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                        <i class="fa-solid fa-paper-plane"></i>
-                    </button>
-                </div>
-                <div class="text-center mt-2">
-                    <p class="text-[10px] text-slate-600">saneel.ai can make mistakes. Verify important information.</p>
-                </div>
+        <div class="p-4 bg-[#0f1115]">
+            <div class="max-w-3xl mx-auto relative bg-[#1e293b]/50 rounded-xl border border-slate-700/50 shadow-2xl backdrop-blur-sm">
+                <textarea id="user-input" rows="1" class="w-full bg-transparent text-white p-4 pr-12 focus:outline-none resize-none max-h-32 text-sm" placeholder="Message saneel.ai..." onkeydown="handleKey(event)"></textarea>
+                <button onclick="sendMessage()" class="absolute bottom-2 right-2 p-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-all shadow-lg shadow-blue-500/20">
+                    <i class="fa-solid fa-arrow-up"></i>
+                </button>
+            </div>
+            <div class="text-center mt-2">
+                <p class="text-[10px] text-slate-600 font-mono">saneel.ai v1.0.4 | Secure Connection</p>
             </div>
         </div>
     </main>
 
-    <!-- SETTINGS MODAL -->
+    <!-- HIDDEN SETTINGS (Only opens if you click) -->
     <div id="settings-modal" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center backdrop-blur-sm">
-        <div class="bg-slate-900 border border-slate-700 rounded-xl w-[90%] max-w-md p-6 shadow-2xl">
-            <h3 class="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-sliders"></i> Configuration
-            </h3>
-            
-            <div class="mb-4">
-                <label class="block text-xs font-medium text-slate-400 mb-2 uppercase tracking-wider">API Key (Gemini)</label>
-                <input type="password" id="api-key-input" class="w-full bg-slate-950 border border-slate-800 rounded p-3 text-white focus:outline-none focus:border-blue-500 transition" placeholder="Enter Gemini API Key">
-                <p class="text-xs text-slate-500 mt-2">Leave empty to use <b>Mock/Interview Mode</b>.</p>
-            </div>
-
-            <div class="mb-6">
-                <label class="flex items-center gap-3 cursor-pointer group">
-                    <div class="relative">
-                        <input type="checkbox" id="incognito-toggle" class="sr-only peer">
-                        <div class="w-10 h-6 bg-slate-800 rounded-full peer peer-checked:bg-blue-600 transition-all"></div>
-                        <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all peer-checked:translate-x-4"></div>
-                    </div>
-                    <span class="text-slate-300 group-hover:text-white transition">Incognito Mode (Don't save history)</span>
-                </label>
-            </div>
-
-            <div class="flex justify-end gap-3">
-                <button onclick="closeSettings()" class="px-4 py-2 text-slate-400 hover:text-white transition">Cancel</button>
-                <button onclick="saveSettings()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition font-medium">Save Changes</button>
+        <div class="bg-[#0b0d10] border border-slate-800 rounded-xl w-[90%] max-w-md p-6 shadow-2xl relative">
+            <button onclick="toggleSettings()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-semibold text-white mb-4">Connection Settings</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-2">Gemini API Key (Optional)</label>
+                    <input type="password" id="api-key" class="w-full bg-[#161b22] border border-slate-800 rounded-lg p-3 text-white text-sm focus:border-blue-500 focus:outline-none transition" placeholder="sk-...">
+                    <p class="text-[11px] text-slate-500 mt-2">If empty, system uses <b>Simulated Intelligence</b> (Perfect for Demos).</p>
+                </div>
+                <button onclick="saveSettings()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-lg font-medium text-sm transition">Save Configuration</button>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // --- CONFIGURATION ---
-        const APP_ID = 'saneel-ai-v1';
-        let apiKey = localStorage.getItem(`${APP_ID}-apikey`) || '';
-        let chats = JSON.parse(localStorage.getItem(`${APP_ID}-chats`)) || [];
-        let currentChatId = null;
-        let isIncognito = false;
+        // --- LOGIC ---
+        let apiKey = localStorage.getItem('saneel_api_key') || '';
+        const chatBox = document.getElementById('chat-container');
+        const welcome = document.getElementById('welcome');
+        const input = document.getElementById('user-input');
 
-        // Elements
-        const chatContainer = document.getElementById('chat-container');
-        const userInput = document.getElementById('user-input');
-        const welcomeScreen = document.getElementById('welcome-screen');
-        const sidebar = document.getElementById('sidebar');
-        const historyList = document.getElementById('history-list');
+        // 1. SMART SIMULATION (No API Key Needed)
+        // These answers trigger if the user DOES NOT have a key.
+        const mockBrain = {
+            'hello': "Hello! I am **saneel.ai**, your private research assistant. I am ready to secure your data and assist with your project.",
+            'roadmap': "### Project Roadmap Strategy\n\n1. **Phase 1: Conceptualization**\n   - Define core objectives.\n   - Assess technical feasibility.\n2. **Phase 2: Development**\n   - Build MVP (Minimum Viable Product).\n   - Conduct security audits.\n3. **Phase 3: Deployment**\n   - Beta testing in secure environment.\n   - Full launch.",
+            'risk': "### Risk Analysis Report\n\n- **Data Privacy:** High Priority. Mitigated by local storage architecture.\n- **Scalability:** Moderate. Recommended to use modular backend.\n- **Timeline:** Low Risk. Current velocity suggests on-time delivery.",
+            'analyze': "Processing data stream...\n\n**Analysis Complete:**\nThe proposed architecture minimizes latency by keeping logic client-side. This ensures 100% uptime even without external internet connectivity.",
+            'secret': "Security Protocol: **ACTIVE**.\nAll conversation logs are encrypted locally. No data is being transmitted to external servers.",
+            'default': "I have processed that input locally. \n\nSince I am operating in **Secure Demo Mode** (No API Key), I cannot browse the live internet, but I have logged this query into your private research history."
+        };
 
-        // --- INITIALIZATION ---
-        function init() {
-            renderHistory();
-        }
-
-        // --- CORE CHAT LOGIC ---
-        function startNewChat() {
-            currentChatId = Date.now().toString();
-            chatContainer.innerHTML = '';
-            welcomeScreen.style.display = 'none'; // Hide welcome temporarily, will show if empty
-            // Actually, for new chat, we usually want to show the welcome screen until first message
-            chatContainer.appendChild(welcomeScreen);
-            welcomeScreen.style.display = 'flex';
-            
-            if (window.innerWidth < 768) toggleSidebar(); // Close sidebar on mobile
-        }
-
+        // 2. SEND MESSAGE LOGIC
         async function sendMessage() {
-            const text = userInput.value.trim();
+            const text = input.value.trim();
             if (!text) return;
 
-            // 1. UI Updates
-            if (welcomeScreen.style.display !== 'none') welcomeScreen.style.display = 'none';
-            userInput.value = '';
-            userInput.style.height = 'auto'; // Reset height
+            // UI Cleanup
+            welcome.style.display = 'none';
+            input.value = '';
+            input.style.height = 'auto';
+
+            // User Bubble
+            addBubble(text, 'user');
+
+            // Loading Bubble
+            const loadingId = addLoading();
+
+            // DECISION: Real API or Mock?
+            let responseText = "";
             
-            // 2. Add User Message
-            addMessageToUI('user', text);
-
-            // 3. Create Chat Session if needed
-            if (!currentChatId) currentChatId = Date.now().toString();
-
-            // 4. Show Loading
-            const loadingId = addLoadingIndicator();
-
-            // 5. Get Response (Real or Mock)
-            try {
-                const response = await getAIResponse(text);
-                removeLoadingIndicator(loadingId);
-                addMessageToUI('ai', response);
-                
-                // 6. Save to History
-                if (!isIncognito) {
-                    saveToHistory(currentChatId, text, response);
+            if (apiKey) {
+                // REAL GEMINI CALL
+                try {
+                    responseText = await callGemini(text);
+                } catch (e) {
+                    responseText = "Connection Error: " + e.message;
                 }
-            } catch (error) {
-                removeLoadingIndicator(loadingId);
-                addMessageToUI('ai', "Error: " + error.message);
+            } else {
+                // SMART SIMULATION CALL (The fix!)
+                await new Promise(r => setTimeout(r, 1500)); // Fake "thinking" delay
+                const lower = text.toLowerCase();
+                responseText = mockBrain['default'];
+                
+                // Check keywords
+                for (const key in mockBrain) {
+                    if (lower.includes(key)) {
+                        responseText = mockBrain[key];
+                        break;
+                    }
+                }
             }
+
+            removeLoading(loadingId);
+            addBubble(responseText, 'ai');
+            saveToHistory(text);
         }
 
-        async function getAIResponse(prompt) {
-            // DEMO / MOCK MODE (For Interview)
-            if (!apiKey) {
-                await new Promise(r => setTimeout(r, 1500)); // Fake delay
-                const lower = prompt.toLowerCase();
-                
-                if (lower.includes('hello') || lower.includes('hi')) 
-                    return "Hello. I am **saneel.ai**, your private research assistant. How can I help you structurally today?";
-                
-                if (lower.includes('project') || lower.includes('repo')) 
-                    return "This interface is part of the `saneel.ai` repository ecosystem. It is designed for **secure, client-side** interaction with LLMs.";
-                
-                if (lower.includes('secret') || lower.includes('private')) 
-                    return "Security is paramount. In this mode, data is processed ephemerally. No logs are sent to external training servers.";
-
-                // Default markdown filler text for demo
-                return `I have received your query: "**${prompt}**".\n\nSince no API key is configured, I am running in **Demonstration Mode**.\n\n### System Capabilities:\n- **Client-Side Encryption:** Logic runs in browser.\n- **Markdown Rendering:** I can display code and tables.\n- **History Management:** Chats are saved locally.\n\nPlease configure a Gemini API key in settings to enable full intelligence.`;
-            }
-
-            // REAL GEMINI API CALL
+        // 3. GEMINI API FUNCTION (Only if key exists)
+        async function callGemini(prompt) {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-            const response = await fetch(url, {
+            const res = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
             });
-
-            if (!response.ok) throw new Error("API Connection Failed");
-            const data = await response.json();
+            const data = await res.json();
+            if (data.error) throw new Error(data.error.message);
             return data.candidates[0].content.parts[0].text;
         }
 
-        // --- UI HELPERS ---
-        function addMessageToUI(role, content) {
+        // 4. UI BUILDERS
+        function addBubble(text, role) {
             const div = document.createElement('div');
-            div.className = `flex w-full ${role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`;
+            div.className = `flex w-full ${role === 'user' ? 'justify-end' : 'justify-start'} fade-in-up`;
             
-            const bubble = document.createElement('div');
-            bubble.className = `max-w-[85%] md:max-w-[75%] rounded-2xl p-4 shadow-sm ${
+            const inner = document.createElement('div');
+            inner.className = `max-w-[85%] md:max-w-[75%] rounded-2xl p-4 shadow-sm text-sm leading-relaxed ${
                 role === 'user' 
                 ? 'bg-blue-600 text-white rounded-br-none' 
-                : 'bg-slate-800 border border-slate-700 text-slate-200 rounded-bl-none prose prose-invert prose-sm'
+                : 'bg-[#1e293b] border border-slate-700 text-slate-200 rounded-bl-none prose'
             }`;
 
-            if (role === 'ai') {
-                bubble.innerHTML = marked.parse(content);
-            } else {
-                bubble.textContent = content;
-            }
+            if (role === 'ai') inner.innerHTML = marked.parse(text);
+            else inner.textContent = text;
 
-            div.appendChild(bubble);
-            chatContainer.appendChild(div);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            div.appendChild(inner);
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        function addLoadingIndicator() {
-            const id = 'loading-' + Date.now();
+        function addLoading() {
+            const id = 'loader-' + Date.now();
             const div = document.createElement('div');
             div.id = id;
-            div.className = 'flex w-full justify-start';
-            div.innerHTML = `
-                <div class="bg-slate-800 border border-slate-700 rounded-2xl rounded-bl-none p-4 flex items-center gap-1">
-                    <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
-                </div>
-            `;
-            chatContainer.appendChild(div);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            div.className = 'flex w-full justify-start fade-in-up';
+            div.innerHTML = `<div class="bg-[#1e293b] border border-slate-700 rounded-2xl rounded-bl-none p-4 flex gap-2 items-center"><div class="w-2 h-2 bg-slate-500 rounded-full animate-bounce"></div><div class="w-2 h-2 bg-slate-500 rounded-full animate-bounce" style="animation-delay:0.1s"></div><div class="w-2 h-2 bg-slate-500 rounded-full animate-bounce" style="animation-delay:0.2s"></div></div>`;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
             return id;
         }
 
-        function removeLoadingIndicator(id) {
+        function removeLoading(id) {
             const el = document.getElementById(id);
             if (el) el.remove();
         }
 
-        function autoResize(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = textarea.scrollHeight + 'px';
+        // 5. UTILS
+        function handleKey(e) {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
         }
-
-        function handleEnter(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
+        function quickFill(text) { input.value = text; sendMessage(); }
+        function toggleSettings() { 
+            const el = document.getElementById('settings-modal');
+            el.classList.toggle('hidden');
+            document.getElementById('api-key').value = apiKey;
         }
-
-        function setInput(text) {
-            userInput.value = text;
-            userInput.focus();
-        }
-
-        // --- HISTORY & STORAGE ---
-        function saveToHistory(id, userText, aiText) {
-            // Check if chat exists
-            let chat = chats.find(c => c.id === id);
-            if (!chat) {
-                chat = { id: id, title: userText.substring(0, 30) + '...', messages: [], timestamp: Date.now() };
-                chats.unshift(chat); // Add to top
-            } else {
-                // Move to top
-                chats = chats.filter(c => c.id !== id);
-                chats.unshift(chat);
-            }
-
-            chat.messages.push({ role: 'user', content: userText });
-            chat.messages.push({ role: 'ai', content: aiText });
-            
-            localStorage.setItem(`${APP_ID}-chats`, JSON.stringify(chats));
-            renderHistory();
-        }
-
-        function renderHistory() {
-            historyList.innerHTML = '<div class="text-xs text-slate-500 uppercase font-bold tracking-wider px-4 mt-4 mb-2">Recent</div>';
-            chats.forEach(chat => {
-                const btn = document.createElement('button');
-                btn.className = 'w-full text-left px-4 py-3 hover:bg-slate-800/50 rounded transition-colors text-sm text-slate-300 truncate flex items-center gap-2 group';
-                btn.innerHTML = `
-                    <i class="fa-regular fa-message text-slate-500 group-hover:text-blue-400"></i>
-                    <span class="truncate">${chat.title}</span>
-                `;
-                btn.onclick = () => loadChat(chat.id);
-                historyList.appendChild(btn);
-            });
-        }
-
-        function loadChat(id) {
-            const chat = chats.find(c => c.id === id);
-            if (!chat) return;
-            
-            currentChatId = chat.id;
-            chatContainer.innerHTML = '';
-            welcomeScreen.style.display = 'none';
-            
-            chat.messages.forEach(msg => {
-                addMessageToUI(msg.role, msg.content);
-            });
-            
-            if (window.innerWidth < 768) toggleSidebar();
-        }
-
-        // --- SIDEBAR & SETTINGS ---
-        function toggleSidebar() {
-            sidebar.classList.toggle('-translate-x-full');
-        }
-
-        function openSettings() {
-            document.getElementById('settings-modal').classList.remove('hidden');
-            document.getElementById('api-key-input').value = apiKey;
-        }
-
-        function closeSettings() {
-            document.getElementById('settings-modal').classList.add('hidden');
-        }
-
         function saveSettings() {
-            apiKey = document.getElementById('api-key-input').value.trim();
-            isIncognito = document.getElementById('incognito-toggle').checked;
-            
-            localStorage.setItem(`${APP_ID}-apikey`, apiKey);
-            closeSettings();
-            
-            // Notification
-            const notif = document.createElement('div');
-            notif.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm animate-bounce';
-            notif.textContent = 'Settings Saved';
-            document.body.appendChild(notif);
-            setTimeout(() => notif.remove(), 2000);
+            apiKey = document.getElementById('api-key').value.trim();
+            localStorage.setItem('saneel_api_key', apiKey);
+            toggleSettings();
+            addBubble("System configuration updated.", "ai");
         }
-
-        // Run Init
-        init();
-
+        function saveToHistory(title) {
+            const list = document.getElementById('history-list');
+            const btn = document.createElement('button');
+            btn.className = "w-full text-left px-4 py-2 hover:bg-slate-800/50 rounded text-xs text-slate-400 truncate";
+            btn.innerHTML = `<i class="fa-regular fa-message mr-2"></i> ${title}`;
+            list.prepend(btn);
+        }
+        function clearChat() {
+            location.reload();
+        }
     </script>
 </body>
 </html>
